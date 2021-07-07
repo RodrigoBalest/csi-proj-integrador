@@ -4,10 +4,25 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
-class User extends Authenticatable
+/**
+ * Class Usuario
+ * @package App\Models
+ * @property int $id
+ * @property string $nome
+ * @property string $email
+ * @property Carbon $email_verificado_em
+ * @property string $senha
+ * @property string $remember_token
+ * @property Carbon $created_at
+ * @property Carbon|null $updated_at
+ * @mixin Builder
+ */
+class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -17,9 +32,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
-        'password',
+        'senha',
     ];
 
     /**
@@ -38,6 +53,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verificado_em' => 'datetime',
     ];
 }
