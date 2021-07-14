@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::resource('contas', ContaController::class);
+
+
+
+
 
 Route::get('/info', function () {
     return phpinfo();
@@ -41,9 +48,7 @@ Route::get('/login', function () {
 });
 
 
-Route::get('/contas', function () {
-    return view('contas');
-})->name('contas');
+
 
 
 Route::get('/categorias', function () {

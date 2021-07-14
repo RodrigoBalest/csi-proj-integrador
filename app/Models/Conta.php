@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
  * @property Usuario $proprietario
+ * @property-read float $saldo_atual
  * @mixin Builder
  */
 class Conta extends Model
@@ -61,5 +62,17 @@ class Conta extends Model
     public function getIcones()
     {
         return self::$icones;
+    }
+
+    /**
+     * Acessor: retorna o saldo atual da conta
+     *
+     * @todo retornar o cálculo real
+     * @see $saldo_atual
+     * @return float
+     */
+    public function getSaldoAtualAttribute()
+    {
+        return mt_rand(-10000, 90000) / 100;
     }
 }

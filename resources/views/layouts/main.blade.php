@@ -9,17 +9,21 @@
     <link rel="stylesheet" href="{{ asset('assets/fa/css/all.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     @stack('head')
-    <title>@yield('title')</title>
+    @hasSection('title')
+        <title>@yield('title') | {{ config('app.name') }}</title>
+    @else
+        <title>{{ config('app.name') }}</title>
+    @endif
 </head>
 <body>
 
     <main class="d-flex">
         <div class="sidebar bg-dark" id="sidebar">
-            <img src="{{ asset('assets/img/logo-inv.png') }}" alt="Pataka - Gerenciador financeiro pessoal" class="p-4 pb-2">
+            <h1><img id="logo" src="{{ asset('assets/img/logo-inv.png') }}" alt="{{ config('app.name') }}"></h1>
             <nav class="mt-3">
                 <ul class="nav sidebar-nav">
                     @include('includes.navlink', ['route' => 'dashboard', 'label' => 'Início', 'icon' => 'fas fa-fw fa-home'])
-                    @include('includes.navlink', ['route' => 'contas', 'label' => 'Contas', 'icon' => 'fas fa-fw fa-wallet'])
+                    @include('includes.navlink', ['route' => 'contas.index', 'label' => 'Contas', 'icon' => 'fas fa-fw fa-wallet'])
                     @include('includes.navlink', ['route' => 'categorias', 'label' => 'Categorias', 'icon' => 'fas fa-fw fa-tags'])
                     @include('includes.navlink', ['route' => 'movimentacoes', 'label' => 'Movimentações', 'icon' => 'fas fa-fw fa-exchange-alt'])
 {{--                    @include('includes.navlink', ['route' => 'fixas', 'label' => 'Receitas e despesas fixas', 'icon' => 'fas fa-fw fa-thumbtack'])--}}
