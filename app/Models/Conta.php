@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\UsuarioLogadoScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,6 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $nome
  * @property string $icone
- * @property string $cor
  * @property float $valor_inicial
  * @property int $usuario_id
  * @property Carbon $created_at
@@ -26,6 +26,13 @@ use Illuminate\Support\Carbon;
 class Conta extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nome',
+        'valor_inicial',
+        'icone',
+        'usuario_id'
+    ];
 
     /**
      * Os possíveis valores para os ícones.
@@ -42,6 +49,14 @@ class Conta extends Model
         'santander' => 'Santander',
         'sicredi' => 'Sicredi'
     ];
+
+    /**
+     * Aplica o QueryScope global ao model
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new UsuarioLogadoScope());
+    }
 
     /**
      * Relacionamento: o proprietário da conta.

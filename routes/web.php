@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContaController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('contas', ContaController::class);
+// Sempre logar com o usuário 1 para fins de desenvolvimento.
+// @TODO Remover
+Auth::loginUsingId(1);
+
+Route::resource('contas', ContaController::class)->except(['create', 'show', 'edit']);
 
 
 

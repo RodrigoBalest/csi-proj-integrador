@@ -17,7 +17,6 @@ class CriaTblContas extends Migration
             $table->id();
             $table->string('nome');
             $table->string('icone');
-            $table->char('cor', 6)->default('BBBBBB');
             $table->decimal('valor_inicial', 11, 2)->default(0.00);
             $table->unsignedBigInteger('usuario_id');
             $table->foreign('usuario_id')->references('id')->on('usuarios')

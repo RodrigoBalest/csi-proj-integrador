@@ -25,7 +25,6 @@ class ContaFactory extends Factory
         return [
             'nome' => ucfirst($this->faker->unique()->word()),
             'icone' => $this->faker->randomElement(array_keys((new Conta())->getIcones())),
-            'cor' => strtoupper(substr($this->faker->hexColor(), 1)),
             'valor_inicial' => $this->faker->optional(0.5, 0)->randomFloat(2, 1, 600),
             'usuario_id' => Usuario::inRandomOrder()->first()->getKey()
         ];

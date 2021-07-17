@@ -4,21 +4,24 @@
 
 @push('head')
     <style type="text/css">
-        .bootstrap-select .icone-conta {
-            padding: 0.5em;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .bootstrap-select .icone-conta img {
+        .bootstrap-select img {
             width: 1.5em;
             height: 1.5em;
+        }
+        .bootstrap-select .dropdown-item {
+            padding: .25rem .75rem;
         }
     </style>
 @endpush
 
-@section('content')
-    <h2 class="mt-2 h1">Contas</h2>
+@push('footer')
+    <script>
+        let contas = @json($contas);
+    </script>
+    <script src="{{ asset('assets/js/contas.js') }}"></script>
+@endpush
 
+@section('content')
     <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
     @php /** @var \App\Models\Conta $conta */ @endphp
     @foreach($contas as $conta)
@@ -40,10 +43,10 @@
                         </tr>
                     </table>
                     <div class="btn-group" role="group" aria-label="Ações">
-                        <button class="btn btn-sm btn-primary">
+                        <button class="btn btn-sm btn-primary btn-edit-conta" data-url="{{ route('contas.update', $conta->getKey()) }}" data-key="{{ $conta->getKey() }}">
                             <i class="fas fa-edit"></i> Editar
                         </button>
-                        <button class="btn btn-sm btn-danger">
+                        <button class="btn btn-sm btn-danger btn-delete-conta" data-url="{{ route('contas.destroy', $conta->getKey()) }}">
                             <i class="fas fa-trash-alt"></i> Excluir
                         </button>
                     </div>
@@ -53,54 +56,57 @@
     @endforeach
     </div>
 
-
-
-    <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">
+    <button data-url="{{ route('contas.store') }}" class="btn btn-success btn-create-conta">
         <i class="fas fa-plus"></i>
         Nova conta
     </button>
 @endsection
 
 @section('body-end')
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Nova conta</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="#">
-                        <div class="form-group">
-                            <label for="conta-nome">Nome</label>
-                            <input type="text" name="nome" id="conta-nome" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="conta-vi">Valor inicial</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">R$</span>
-                                </div>
-                                <input type="number" name="valor" id="conta-vi" class="form-control" value="0" step="0.01">
+    <div class="modal fade" id="form-conta-modal" tabindex="-1" aria-labelledby="form-modal-title" aria-hidden="true">
+        <form id="form-conta">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="form-modal-title">Nova conta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <div class="form-group">
+                                <label for="conta-nome">Nome</label>
+                                <input type="text" name="nome" id="conta-nome" class="form-control">
+                                <small class="text-danger input-feedback" id="conta-nome-error"></small>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="conta-icone">Ícone</label>
-                            <select name="icone" id="conta-icone" class="selectpicker form-control">
-                                <option data-content="<div class='icone-conta text-center mr-3' style='background-color:var(--green);'><img src='{{ asset('assets/img/wallet-solid.svg') }}' alt='Carteira'></div> Carteira" value="carteira">Carteira</option>
-                                <option data-content="<div class='icone-conta text-center mr-3' style='background-color:#FFF22D; color:#33348E;'><img src='{{ asset('assets/img/bb.svg') }}' alt='Banco do Brasil'></div> Banco do Brasil" value="bb">Banco do Brasil</option>
-                                <option data-content="<div class='icone-conta text-center mr-3' style='background-color:#8a05be;'><img src='{{ asset('assets/img/nubank.svg') }}' alt='Nubank'></div> Nubank" value="nubank">Nubank</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
+                            <div class="form-group">
+                                <label for="conta-vi">Valor inicial</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">R$</span>
+                                    </div>
+                                    <input type="number" name="valor_inicial" id="conta-vi" class="form-control" value="0" step="0.01">
+                                </div>
+                                <small class="text-danger input-feedback" id="conta-vi-error"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="conta-icone">Ícone</label>
+                                <select name="icone" id="conta-icone" name="icone" class="selectpicker form-control">
+                                @foreach($icones as $chave => $nome)
+                                    <option data-content="<img src='{{ asset('assets/logos/' . $chave . '.svg') }}' alt='{{ $nome }}'> {{ $nome }}" value="{{ $chave }}">{{ $nome }}</option>
+                                @endforeach
+                                </select>
+                                <small class="text-danger input-feedback" id="conta-icone-error"></small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 @endsection

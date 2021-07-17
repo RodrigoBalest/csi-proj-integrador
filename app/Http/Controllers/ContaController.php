@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContaRequest;
 use App\Models\Conta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ContaController extends Controller
 {
@@ -22,29 +24,30 @@ class ContaController extends Controller
     public function index()
     {
         $vars['contas'] = $this->contas->orderBy('created_at')->get();
+        $vars['icones'] = $this->contas->getIcones();
 
         return view('contas.index', $vars);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ContaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContaRequest $request)
     {
-        //
+        $conta = $this->contas->newInstance([
+            'nome' => $request->input('nome'),
+            'valor_inicial' => $request->input('valor_inicial'),
+            'icone' => $request->input('icone'),
+            'usuario_id' => Auth::id()
+        ]);
+
+        $conta->save();
+
+        $request->session()->flash('success', 'Conta criada!');
+        return response()->json(['success' => true]);
     }
 
     /**
