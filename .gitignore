@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
-/public/assets
+/public/assets/*
 !/public/assets/.gitkeep
 /public/mix-manifest.json
 .env

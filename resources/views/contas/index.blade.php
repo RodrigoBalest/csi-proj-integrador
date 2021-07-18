@@ -26,7 +26,7 @@
     @php /** @var \App\Models\Conta $conta */ @endphp
     @foreach($contas as $conta)
         <div class="col">
-            <div class="card p-3 mb-3 flex-row">
+            <div class="card p-3 mb-4 flex-row">
                 <div class="col-conta-icone mr-3 flex-shrink-0">
                     <img src="{{ asset('assets/logos/' . $conta->icone . '.svg') }}" alt="{{ $conta->nome }}">
                 </div>

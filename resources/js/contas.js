@@ -26,7 +26,7 @@ $(function () {
         let key = $(this).data('key');
         let conta;
         contas.forEach(function (c) {
-           if (c.id == key) {
+           if (c.id === key) {
                conta = c;
            }
         });
@@ -56,7 +56,7 @@ $(function () {
             url: url,
             method: method,
             data: dados
-        }).done(function (data, textStatus, jqXHR) {
+        }).done(function () {
             window.location.reload();
         }).fail(function (data) {
             // Mostra os erros de validação, se houverem.
@@ -67,10 +67,30 @@ $(function () {
                     let erros = data.responseJSON.errors[key];
                     $(idTarget).text(erros.join('<br>'));
                 }
+            } else {
+                alert('Erro ' + data.status + ': ' + data.statusText);
             }
         }).always(function() {
             // Reseta o botão de envio.
             $btnSubmit.prop('disabled', false).find('.fas').remove();
         });
-    })
+    });
+
+    // Manipula clicks nos botões de excluir conta.
+    $('.btn-delete-conta').on('click', function (ev) {
+        ev.preventDefault();
+        let $btn = $(this);
+        let deleteUrl = $btn.data('url');
+        $btn.prop('disabled', true).find('i').toggleClass('fa-trash-alt fa-spinner fa-pulse');
+        $.ajax({
+            url: deleteUrl,
+            method: 'DELETE'
+        }).done(function () {
+            window.location.reload();
+        }).fail(function (data) {
+            alert('Erro ' + data.status + ': ' + data.statusText);
+            $btn.prop('disabled', false).find('i').toggleClass('fa-trash-alt fa-spinner fa-pulse');
+        })
+    });
+
 });

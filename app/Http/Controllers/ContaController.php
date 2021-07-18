@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContaRequest;
 use App\Models\Conta;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class ContaController extends Controller
 {
@@ -19,7 +21,7 @@ class ContaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -32,8 +34,9 @@ class ContaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\ContaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param ContaRequest $request
+     * @return Response
+     * @throws Throwable
      */
     public function store(ContaRequest $request)
     {
@@ -44,54 +47,44 @@ class ContaController extends Controller
             'usuario_id' => Auth::id()
         ]);
 
-        $conta->save();
+        $conta->saveOrFail();
 
         $request->session()->flash('success', 'Conta criada!');
         return response()->json(['success' => true]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Conta $conta)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Conta $conta)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
+     * @param ContaRequest $request
+     * @param Conta $conta
+     * @return Response
+     * @throws Throwable
      */
-    public function update(Request $request, Conta $conta)
+    public function update(ContaRequest $request, Conta $conta)
     {
-        //
+        $conta->nome = $request->input('nome');
+        $conta->valor_inicial = $request->input('valor_inicial');
+        $conta->icone = $request->input('icone');
+
+        $conta->saveOrFail();
+
+        $request->session()->flash('success', 'Conta alterada!');
+        return response()->json(['success' => true]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Conta $conta
+     * @return Response
      */
-    public function destroy(Conta $conta)
+    public function destroy(Request $request, Conta $conta)
     {
-        //
+        $conta->delete();
+
+        $request->session()->flash('success', 'Conta excluída!');
+        return response()->json(['success' => true]);
     }
 }
