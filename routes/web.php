@@ -1,29 +1,11 @@
 <?php
 
 use App\Http\Controllers\ContaController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Sempre logar com o usuário 1 para fins de desenvolvimento.
-// @TODO Remover
-Auth::loginUsingId(1);
-
-Route::resource('contas', ContaController::class)->except(['create', 'show', 'edit']);
-
-
-
-
+Route::resource('contas', ContaController::class)
+    ->except(['create', 'show', 'edit'])
+    ->middleware(['auth', 'verified']);
 
 Route::get('/info', function () {
     return phpinfo();
@@ -46,14 +28,7 @@ Route::get('/', function () {
     }
     $fmt = new NumberFormatter(config('locale'), NumberFormatter::CURRENCY );
     return view('dashboard', compact('dados', 'fmt'));
-})->name('dashboard');
-
-Route::get('/login', function () {
-    return view('auth.login');
-});
-
-
-
+})->name('dashboard')->middleware(['auth', 'verified']);
 
 
 Route::get('/categorias', function () {
@@ -81,24 +56,10 @@ Route::get('/categorias', function () {
         ]
     ];
     return view('categorias', compact('dados'));
-})->name('categorias');
+})->name('categorias')->middleware(['auth', 'verified']);
 
 Route::get('/movimentacoes', function () {
     return view('movimentacoes');
-})->name('movimentacoes');
+})->name('movimentacoes')->middleware(['auth', 'verified']);
 
-Route::get('/fixas', function () {
-    return view('fixas');
-})->name('fixas');
-
-Route::get('/usuarios', function () {
-    return view('usuarios');
-})->name('usuarios');
-
-Route::get('/sair', function () {
-    return view('login');
-})->name('sair');
-
-Route::get('/cadastrar', function () {
-    return view('cadastrar');
-})->name('cadastrar');
+require __DIR__.'/auth.php';

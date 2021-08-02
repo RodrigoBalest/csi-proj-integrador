@@ -3,8 +3,6 @@
 @section('title', 'Painel')
 
 @section('content')
-    <h1 class="mt-2">Início</h1>
-
     <div class="card">
         <div class="card-header">
             Balanço próximos meses

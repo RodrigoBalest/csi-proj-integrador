@@ -30,7 +30,7 @@
                     @include('includes.navlink', ['route' => 'movimentacoes', 'label' => 'Movimentações', 'icon' => 'fas fa-fw fa-exchange-alt'])
 {{--                    @include('includes.navlink', ['route' => 'fixas', 'label' => 'Receitas e despesas fixas', 'icon' => 'fas fa-fw fa-thumbtack'])--}}
 {{--                    @include('includes.navlink', ['route' => 'usuarios', 'label' => 'Usuários', 'icon' => 'fas fa-fw fa-user-friends'])--}}
-                    @include('includes.navlink', ['route' => 'sair', 'label' => 'Sair', 'icon' => 'fas fa-fw fa-sign-out-alt'])
+                    @include('includes.navlink', ['route' => 'logout', 'label' => 'Sair', 'icon' => 'fas fa-fw fa-sign-out-alt'])
                 </ul>
             </nav>
         </div>

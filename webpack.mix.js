@@ -21,8 +21,8 @@ mix
     .copyDirectory('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/assets/fa/webfonts')
     // Copia Boostrap Select
     .combine([
-       'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
-       'node_modules/bootstrap-select/dist/js/i18n/defaults-pt_BR.js'
+        'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+        'node_modules/bootstrap-select/dist/js/i18n/defaults-pt_BR.js'
     ], 'public/assets/js/bootstrap-select.js')
     .copy('node_modules/bootstrap-select/dist/css/bootstrap-select.min.css', 'public/assets/css')
     // Copia imagens

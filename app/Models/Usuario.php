@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @mixin Builder
  */
-class Usuario extends Authenticatable
+class Usuario extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -43,7 +43,7 @@ class Usuario extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
+        'senha',
         'remember_token',
     ];
 
@@ -55,4 +55,12 @@ class Usuario extends Authenticatable
     protected $casts = [
         'email_verificado_em' => 'datetime',
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function getAuthPassword()
+    {
+        return $this->senha;
+    }
 }

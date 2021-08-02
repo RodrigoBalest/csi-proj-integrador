@@ -17,7 +17,7 @@ class CriaTblUsuarios extends Migration
             $table->id();
             $table->string('nome');
             $table->string('email')->unique();
-            $table->timestamp('email_verificado_em')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('senha');
             $table->rememberToken();
             $table->timestamps();
