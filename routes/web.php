@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContaController;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('contas', ContaController::class)
+    ->except(['create', 'show', 'edit'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('categorias', CategoriaController::class)
     ->except(['create', 'show', 'edit'])
     ->middleware(['auth', 'verified']);
 
@@ -30,33 +35,6 @@ Route::get('/', function () {
     return view('dashboard', compact('dados', 'fmt'));
 })->name('dashboard')->middleware(['auth', 'verified']);
 
-
-Route::get('/categorias', function () {
-    $dados = [
-        [
-            'icone' => 'fa-home',
-            'cor' => '--gray',
-            'nome' => 'Moradia'
-        ], [
-            'icone' => 'fa-car',
-            'cor' => '--indigo',
-            'nome' => 'Transporte'
-        ], [
-            'icone' => 'fa-wifi',
-            'cor' => '--blue',
-            'nome' => 'Serviços'
-        ], [
-            'icone' => 'fa-shopping-cart',
-            'cor' => '--teal',
-            'nome' => 'Mercado'
-        ], [
-            'icone' => 'fa-gamepad',
-            'cor' => '--cyan',
-            'nome' => 'Lazer'
-        ]
-    ];
-    return view('categorias', compact('dados'));
-})->name('categorias')->middleware(['auth', 'verified']);
 
 Route::get('/movimentacoes', function () {
     return view('movimentacoes');

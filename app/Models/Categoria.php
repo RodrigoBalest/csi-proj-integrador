@@ -10,29 +10,27 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
 /**
- * Class Conta
+ * Class Categoria
  * @package App\Models
- * @property int $id
  * @property string $nome
  * @property string $icone
- * @property float $valor_inicial
+ * @property string $cor
  * @property int $usuario_id
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
  * @property Usuario $dono
- * @property-read float $saldo_atual
  * @mixin Builder
  */
-class Conta extends Model
+class Categoria extends Model
 {
     use HasFactory;
 
-    protected $table = 'contas';
+    protected $table = 'categorias';
 
     protected $fillable = [
         'nome',
-        'valor_inicial',
         'icone',
+        'cor',
         'usuario_id'
     ];
 
@@ -42,14 +40,24 @@ class Conta extends Model
      * @var array
      */
     private static $icones = [
-        'carteira' => 'Carteira',
-        'bb' => 'Banco do Brasil',
-        'caixa' => 'Caixa',
-        'itau' => 'Itaú',
-        'mastercard' => 'Mastercard',
-        'nubank' => 'Nubank',
-        'santander' => 'Santander',
-        'sicredi' => 'Sicredi'
+        'fa-home',
+        'fa-car',
+        'fa-wifi',
+        'fa-shopping-cart',
+        'fa-gamepad',
+        'fa-balance-scale',
+        'fa-money-bill-wave',
+        'fa-piggy-bank',
+        'fa-landmark',
+        'fa-wallet',
+        'fa-credit-card',
+        'fa-heart',
+        'fa-capsules',
+        'fa-briefcase-medical',
+        'fa-desktop',
+        'fa-plane',
+        'fa-graduation-cap',
+        'fa-theater-masks',
     ];
 
     /**
@@ -58,17 +66,6 @@ class Conta extends Model
     protected static function booted()
     {
         static::addGlobalScope(new UsuarioLogadoScope());
-    }
-
-    /**
-     * Relacionamento: o proprietário da conta.
-     *
-     * @see $dono
-     * @return BelongsTo
-     */
-    public function dono()
-    {
-        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 
     /**
@@ -82,14 +79,13 @@ class Conta extends Model
     }
 
     /**
-     * Acessor: retorna o saldo atual da conta
+     * Relacionamento: o proprietário da categoria.
      *
-     * @todo retornar o cálculo real
-     * @see $saldo_atual
-     * @return float
+     * @see $dono
+     * @return BelongsTo
      */
-    public function getSaldoAtualAttribute()
+    public function dono()
     {
-        return mt_rand(-10000, 90000) / 100;
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 }

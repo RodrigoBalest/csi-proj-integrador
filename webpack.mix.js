@@ -32,4 +32,5 @@ mix
     // Outros
     .copy('resources/css/custom.css', 'public/assets/css')
     .copy('resources/js/app.js', 'public/assets/js')
-    .copy('resources/js/contas.js', 'public/assets/js');
+    .copy('resources/js/contas.js', 'public/assets/js')
+    .copy('resources/js/categorias.js', 'public/assets/js');
