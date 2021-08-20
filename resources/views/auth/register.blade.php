@@ -57,6 +57,7 @@
         <div class="form-group">
             <label for="inputPassword">Senha</label>
             <input type="password" name="senha" id="inputPassword" class="@error('senha') is-invalid @enderror form-control" required>
+            <small class="font-italic text-muted">A senha deve ter pelo menos 8 caracteres.</small>
             @error('senha')<small class="text-danger font-italic">{{ $message }}</small>@enderror
         </div>
 
