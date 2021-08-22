@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContaController;
-use App\Http\Controllers\IndexController;
+use App\Http\Controllers\MovimentacaoController;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('contas', ContaController::class)
@@ -13,11 +13,14 @@ Route::resource('categorias', CategoriaController::class)
     ->except(['create', 'show', 'edit'])
     ->middleware(['auth', 'verified']);
 
-Route::get('/', [IndexController::class, 'index'])
+Route::get('/', [MovimentacaoController::class, 'dashboard'])
     ->name('dashboard')
     ->middleware(['auth', 'verified']);
 
-
+Route::resource('movimentacoes', MovimentacaoController::class)
+    ->parameters(['movimentacoes' => 'movimentacao'])
+    ->except(['create', 'show', 'edit'])
+    ->middleware(['auth', 'verified']);
 
 
 
@@ -36,8 +39,6 @@ Route::get('/info', function () {
 
 
 
-Route::get('/movimentacoes', function () {
-    return view('movimentacoes');
-})->name('movimentacoes')->middleware(['auth', 'verified']);
+
 
 require __DIR__.'/auth.php';

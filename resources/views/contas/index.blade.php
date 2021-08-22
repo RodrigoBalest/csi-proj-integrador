@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <th>Saldo atual:</th>
-                            <td class="text-right">R$ {{ number_format($conta->saldo_atual, 2, ',', '.') }}</td>
+                            <td class="text-right @if($conta->saldo_atual < 0) text-danger @endif">R$ {{ number_format($conta->saldo_atual, 2, ',', '.') }}</td>
                         </tr>
                     </table>
                     <div class="btn-group" role="group" aria-label="Ações">

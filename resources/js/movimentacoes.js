@@ -1,83 +1,61 @@
 $(function () {
-    let $form = $('#form-categoria');
-    let $modal = $('#form-categoria-modal');
+    let $form = $('#form-movimentacao');
+    let $modal = $('#form-movimentacao-modal');
     let $modalTitle = $('#form-modal-title');
     let $btnSubmit = $form.find('button[type="submit"]');
     let url = '';
     let method = '';
+    let tipo = '';
 
-    let iconeSelector = function () {
-       let $container = $('#icon-picker');
-       let $input = $container.find('input');
-       let $display = $container.find('.selected-icon');
-       let $options = $container.find('.dropdown-item');
-       let val = $input.val();
-
-       if (val !== '') {
-           setVal(val);
-       }
-
-       $options.on('click', function (ev) {
-          ev.preventDefault();
-          let val = $(this).data('value');
-          setVal(val);
-       });
-
-       function reset() {
-           $input.val('');
-           $display.html('');
-       }
-
-       function setVal(_val) {
-           val = _val;
-           $input.val(_val);
-           let html = '<i class="fas fa-fw ' + _val + '"></i>';
-           $display.html(html);
-       }
-
-       function getVal() {
-           return val
-       }
-
-       return {
-           reset: reset,
-           setVal: setVal,
-           getVal: getVal
-       };
-    }();
-
-    // Manipula clicks no botão de criar nova categoria.
-    $('.btn-create-categoria').on('click', function (ev) {
+    // Manipula clicks nos botões de criar nova movimentação.
+    $('.btn-create-mvto').on('click', function (ev) {
         ev.preventDefault();
+        tipo = $(this).data('tipo');
         url = $(this).data('url');
         method = 'POST';
         $form.get(0).reset();
-        iconeSelector.reset();
-        $modalTitle.html('Nova conta');
+        if (tipo === 'receita') {
+            $modalTitle.html('Nova receita');
+        } else if (tipo === 'despesa') {
+            $modalTitle.html('Nova despesa');
+        }
         $form.find('.input-feedback').empty();
         $modal.modal('show');
     });
 
-    // Manipula clicks nos botões de editar categoria.
-    $('.btn-edit-categoria').on('click', function (ev) {
+    // Manipula clicks nos botões de editar movimentação.
+    $('.btn-edit-mvto').on('click', function (ev) {
         ev.preventDefault();
+        tipo = $(this).data('tipo');
+        let conta_id;
         url = $(this).data('url');
         method = 'PATCH';
         let key = $(this).data('key');
-        let categoria;
-        categorias.forEach(function (c) {
-           if (c.id === key) {
-               categoria = c;
-           }
+        let mvto;
+        mvtos.forEach(function (c) {
+            if (c.id === key) {
+                mvto = c;
+            }
         });
-        if (categoria === undefined) {
-            console.error('Categoria selecionada não encontrada no objeto global \'categorias\': key=' + key);
+        if (mvto === undefined) {
+            console.error('Movimentação selecionada não encontrada no objeto global \'mvtos\': key=' + key);
             return;
         }
-        $modalTitle.html('Editar categoria');
-        $('#cat-nome').val(categoria.nome);
-        $('#cat-cor').val('#' + categoria.cor);
-        iconeSelector.setVal(categoria.icone);
+        if (tipo === 'receita') {
+            $modalTitle.html('Editar receita');
+            conta_id = mvto.envia_para;
+        } else if (tipo === 'despesa') {
+            $modalTitle.html('Editar despesa');
+            conta_id = mvto.recebe_de;
+        }
+
+        $('#mvto-nome').val(mvto.nome);
+        $('#mvto-valor').val(mvto.valor);
+        $('#mvto-cat').val(mvto.categoria_id);
+        $('#mvto-conta').val(conta_id);
+        $('#mvto-vcto').val(mvto.vence_em);
+        $('.selectpicker').selectpicker('refresh');
+        console.dir(mvto);
         $form.find('.input-feedback').empty();
         $modal.modal('show');
     });
@@ -86,9 +64,12 @@ $(function () {
     $form.on('submit', function (ev) {
         ev.preventDefault();
         let dados = {
-            nome: $('#cat-nome').val(),
-            cor: $('#cat-cor').val(),
-            icone: iconeSelector.getVal()
+            tipo: tipo,
+            nome: $('#mvto-nome').val(),
+            valor: $('#mvto-valor').val(),
+            categoria: $('#mvto-cat').val(),
+            conta: $('#mvto-conta').val(),
+            vencimento: $('#mvto-vcto').val()
         };
         $btnSubmit.prop('disabled', true).prepend('<i class="fas fa-spinner fa-pulse mr-1"></i>');
         $form.find('.input-feedback').empty();
@@ -102,7 +83,7 @@ $(function () {
             // Mostra os erros de validação, se houverem.
             if (data.status === 422) {
                 for (let key in data.responseJSON.errors) {
-                    let idTarget = '#cat-' + key + '-error';
+                    let idTarget = '#mvto-' + key + '-error';
                     let erros = data.responseJSON.errors[key];
                     $(idTarget).text(erros.join('<br>'));
                 }
@@ -115,10 +96,10 @@ $(function () {
         });
     });
 
-    // Manipula clicks nos botões de excluir categoria.
-    $('.btn-delete-categoria').on('click', function (ev) {
+    // Manipula clicks nos botões de excluir movimentação.
+    $('.btn-delete-mvto').on('click', function (ev) {
         ev.preventDefault();
-        if (! confirm('Deseja mesmo excluir esta categoria?\nTodas as movimentações desta categoria também serão excluídas.')) {
+        if (! confirm('Deseja mesmo excluir esta movimentação?')) {
             return;
         }
         let $btn = $(this);
@@ -134,5 +115,4 @@ $(function () {
             $btn.prop('disabled', false).find('i').toggleClass('fa-trash-alt fa-spinner fa-pulse');
         })
     });
-
 });

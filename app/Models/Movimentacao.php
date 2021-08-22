@@ -28,8 +28,14 @@ use Illuminate\Support\Carbon;
  * @property-read Conta|null $destino
  * @property-read Usuario $usuario
  *
+ * @property-read bool $is_receita
+ * @property-read bool $is_despesa
+ * @property-read bool $is_transferencia
+ *
  * @method self porMesVcto(int $mes)
  * @method self porAnoVcto(int $ano)
+ *
+ * @mixin Builder
  */
 class Movimentacao extends Model
 {
@@ -39,6 +45,16 @@ class Movimentacao extends Model
 
     protected $casts = [
         'vence_em' => 'datetime:Y-m-d'
+    ];
+
+    protected $fillable = [
+        'nome',
+        'valor',
+        'vence_em',
+        'categoria_id',
+        'recebe_de',
+        'envia_para',
+        'usuario_id'
     ];
 
     /**
@@ -93,5 +109,20 @@ class Movimentacao extends Model
     public function scopePorAnoVcto(Builder $query, $ano)
     {
         return $query->whereYear('vence_em', '=', $ano);
+    }
+
+    public function getIsReceitaAttribute()
+    {
+        return is_null($this->recebe_de) && ! is_null($this->envia_para);
+    }
+
+    public function getIsDespesaAttribute()
+    {
+        return ! is_null($this->recebe_de) && is_null($this->envia_para);
+    }
+
+    public function getIsTransferenciaAttribute()
+    {
+        return ! is_null($this->recebe_de) && ! is_null($this->envia_para);
     }
 }

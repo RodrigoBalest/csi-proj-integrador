@@ -79,6 +79,9 @@ $(function () {
     // Manipula clicks nos botões de excluir conta.
     $('.btn-delete-conta').on('click', function (ev) {
         ev.preventDefault();
+        if (! confirm('Deseja mesmo excluir esta conta?\nTodas as movimentações desta conta também serão excluídas.')) {
+            return;
+        }
         let $btn = $(this);
         let deleteUrl = $btn.data('url');
         $btn.prop('disabled', true).find('i').toggleClass('fa-trash-alt fa-spinner fa-pulse');

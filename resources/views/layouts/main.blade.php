@@ -27,7 +27,7 @@
                     @include('includes.navlink', ['route' => 'dashboard', 'label' => 'Início', 'icon' => 'fas fa-fw fa-home'])
                     @include('includes.navlink', ['route' => 'contas.index', 'label' => 'Contas', 'icon' => 'fas fa-fw fa-wallet'])
                     @include('includes.navlink', ['route' => 'categorias.index', 'label' => 'Categorias', 'icon' => 'fas fa-fw fa-tags'])
-                    @include('includes.navlink', ['route' => 'movimentacoes', 'label' => 'Movimentações', 'icon' => 'fas fa-fw fa-exchange-alt'])
+                    @include('includes.navlink', ['route' => 'movimentacoes.index', 'label' => 'Movimentações', 'icon' => 'fas fa-fw fa-exchange-alt'])
 {{--                    @include('includes.navlink', ['route' => 'fixas', 'label' => 'Receitas e despesas fixas', 'icon' => 'fas fa-fw fa-thumbtack'])--}}
 {{--                    @include('includes.navlink', ['route' => 'usuarios', 'label' => 'Usuários', 'icon' => 'fas fa-fw fa-user-friends'])--}}
                     @include('includes.navlink', ['route' => 'logout', 'label' => 'Sair', 'icon' => 'fas fa-fw fa-sign-out-alt'])

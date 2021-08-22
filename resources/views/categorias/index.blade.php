@@ -11,6 +11,9 @@
             width: auto;
             padding: .25em .5em;
         }
+        .tbl-lista-categorias td {
+            vertical-align: middle;
+        }
     </style>
 @endpush
 
@@ -22,7 +25,7 @@
 @endpush
 
 @section('content')
-    <table class="table">
+    <table class="table tbl-lista-categorias">
         <tbody>
         @php /** @var \App\Models\Categoria $cat */ @endphp
         <?php foreach($categorias as $cat): ?>
@@ -53,7 +56,7 @@
 @endsection
 
 @section('body-end')
-    <div class="modal fade" id="form-categoria-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="form-categoria-modal" tabindex="-1" aria-hidden="true">
         <form id="form-categoria">
             <div class="modal-dialog">
                 <div class="modal-content">

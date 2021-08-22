@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Scopes\UsuarioLogadoScope;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
@@ -20,7 +22,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
  * @property Usuario $dono
+ *
+ * @property-read Collection|Movimentacao[] $receitas
+ * @property-read Collection|Movimentacao[] $despesas
+ *
  * @property-read float $saldo_atual
+ *
  * @mixin Builder
  */
 class Conta extends Model
@@ -61,6 +68,16 @@ class Conta extends Model
     }
 
     /**
+     * Retorna as opções possíveis de ícones.
+     *
+     * @return array
+     */
+    public function getIcones()
+    {
+        return self::$icones;
+    }
+
+    /**
      * Relacionamento: o proprietário da conta.
      *
      * @see $dono
@@ -72,24 +89,43 @@ class Conta extends Model
     }
 
     /**
-     * Retorna as opções possíveis de ícones.
+     * Relacionamento com as movimentações que colocam dinheiro nesta conta.
      *
-     * @return array
+     * @return HasMany
      */
-    public function getIcones()
+    public function receitas()
     {
-        return self::$icones;
+        return $this->hasMany(Movimentacao::class, 'envia_para');
+    }
+
+    /**
+     * Relacionamento com as movimentações que retiram dinheiro desta conta.
+     *
+     * @return HasMany
+     */
+    public function despesas()
+    {
+        return $this->hasMany(Movimentacao::class, 'recebe_de');
     }
 
     /**
      * Acessor: retorna o saldo atual da conta
      *
-     * @todo retornar o cálculo real
      * @see $saldo_atual
      * @return float
      */
     public function getSaldoAtualAttribute()
     {
-        return mt_rand(-10000, 90000) / 100;
+        $valor = $this->valor_inicial;
+
+        foreach ($this->receitas as $receita) {
+            $valor += $receita->valor;
+        }
+
+        foreach ($this->despesas as $despesa) {
+            $valor -= $despesa->valor;
+        }
+
+        return $valor;
     }
 }
