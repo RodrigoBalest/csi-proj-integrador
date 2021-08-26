@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoriaRequest;
 use App\Models\Categoria;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -87,13 +88,18 @@ class CategoriaController extends Controller
      *
      * @param Request $request
      * @param Categoria $categoria
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy(Request $request, Categoria $categoria)
     {
-        $categoria->delete();
+        $numCategorias = $this->categorias->count();
+        if ($numCategorias > 1) {
+            $categoria->delete();
+            $request->session()->flash('success', 'Categoria excluída!');
+            return response()->json(['success' => true]);
+        }
 
-        $request->session()->flash('success', 'Categoria excluída!');
-        return response()->json(['success' => true]);
+        $request->session()->flash('warning', 'Não é possível excluir a única categoria.');
+        return response()->json(['success' => false]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContaRequest;
 use App\Models\Conta;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -78,13 +79,18 @@ class ContaController extends Controller
      *
      * @param Request $request
      * @param Conta $conta
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy(Request $request, Conta $conta)
     {
-        $conta->delete();
+        $numContas = $this->contas->count();
+        if ($numContas > 1) {
+            $conta->delete();
+            $request->session()->flash('success', 'Conta excluída!');
+            return response()->json(['success' => true]);
+        }
 
-        $request->session()->flash('success', 'Conta excluída!');
-        return response()->json(['success' => true]);
+        $request->session()->flash('warning', 'Não é possível excluir a única conta.');
+        return response()->json(['success' => false]);
     }
 }

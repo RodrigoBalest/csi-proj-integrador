@@ -39,9 +39,11 @@
                     <button class="btn btn-sm btn-primary btn-edit-categoria" data-url="{{ route('categorias.update', $cat->getKey()) }}" data-key="{{ $cat->getKey() }}">
                         <i class="fas fa-edit"></i> Editar
                     </button>
+                    @if($categorias->count() > 1)
                     <button class="btn btn-sm btn-danger btn-delete-categoria" data-url="{{ route('categorias.destroy', $cat->getKey()) }}">
                         <i class="fas fa-trash-alt"></i> Excluir
                     </button>
+                    @endif
                 </div>
             </td>
         </tr>

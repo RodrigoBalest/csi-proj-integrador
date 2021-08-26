@@ -46,9 +46,11 @@
                         <button class="btn btn-sm btn-primary btn-edit-conta" data-url="{{ route('contas.update', $conta->getKey()) }}" data-key="{{ $conta->getKey() }}">
                             <i class="fas fa-edit"></i> Editar
                         </button>
+                        @if($contas->count() > 1)
                         <button class="btn btn-sm btn-danger btn-delete-conta" data-url="{{ route('contas.destroy', $conta->getKey()) }}">
                             <i class="fas fa-trash-alt"></i> Excluir
                         </button>
+                        @endif
                     </div>
                 </div>
             </div>

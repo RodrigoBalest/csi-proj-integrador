@@ -61,6 +61,8 @@ class Usuario extends Authenticatable implements MustVerifyEmail
         'email_verificado_em' => 'datetime',
     ];
 
+
+
     /**
      * @inheritDoc
      */
