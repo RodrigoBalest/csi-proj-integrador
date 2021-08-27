@@ -22,23 +22,4 @@ Route::resource('movimentacoes', MovimentacaoController::class)
     ->except(['create', 'show', 'edit'])
     ->middleware(['auth', 'verified']);
 
-
-
-
-
-
-
-
-
-
-
-Route::get('/info', function () {
-    return phpinfo();
-});
-
-
-
-
-
-
 require __DIR__.'/auth.php';
